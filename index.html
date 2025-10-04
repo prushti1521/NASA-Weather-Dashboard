@@ -241,6 +241,84 @@
       margin: 0 0.5rem;
     }
     footer a:hover { text-decoration: underline; }
+
+    /* ---- Responsive Enhancements ---- */
+@media (max-width: 1024px) {
+  .hero h2 {
+    font-size: 2rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+  .features {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: 1.7rem;
+  }
+  .hero p {
+    font-size: 0.95rem;
+  }
+  .features {
+    grid-template-columns: 1fr;
+  }
+  .about h2, .data-sources h2, .cta h2 {
+    font-size: 1.6rem;
+  }
+  .about p, .data-sources p, .cta p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  nav ul {
+    width: 100%;
+    top: 60px;
+    right: 0;
+    border-radius: 0;
+  }
+  .hero {
+    padding: 4rem 1rem;
+  }
+  .hero h2 {
+    font-size: 1.5rem;
+  }
+  .hero p {
+    font-size: 0.9rem;
+  }
+  .hero a {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  .features {
+    padding: 2rem 1rem;
+    gap: 1rem;
+  }
+  .feature-card {
+    padding: 1.5rem;
+  }
+  .about, .data-sources, .cta {
+    padding: 2rem 1rem;
+  }
+  .cta h2 {
+    font-size: 1.5rem;
+  }
+  .cta p {
+    font-size: 0.95rem;
+  }
+  .cta a {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
   </style>
 </head>
 <body>
