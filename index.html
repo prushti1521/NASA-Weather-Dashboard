@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | NASA Weather Dashboard</title>
+  <meta name="description" content="NASA Weather Probability Dashboard - Interactive analysis of historical climate data">
+  <meta property="og:title" content="NASA Weather Probability Dashboard">
+  <meta property="og:description" content="Analyze historical weather probabilities using NASA POWER and GSOY datasets">
+  <meta property="og:image" content="preview.png">
+  <meta property="og:type" content="website">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9fafb;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ---- Header / Navbar ---- */
+    header {
+      background: #1e40af;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .header-content {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo-title h1 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+    .nasa-badge {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav ul li a:hover,
+    nav ul li a.active {
+      color: #f59e0b;
+    }
+    .mobile-menu-btn {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        background: #1e40af;
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        width: 200px;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+      nav ul.active { display: flex; }
+      .mobile-menu-btn { display: block; }
+    }
+
+    /* ---- Hero Section ---- */
+    .hero {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #1e3a8a, #4338ca);
+      color: #fff;
+    }
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .hero a {
+      background: #f59e0b;
+      color: #fff;
+      padding: 1rem 1.8rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s;
+      display: inline-block;
+    }
+    .hero a:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+    }
+
+    /* ---- Features Section ---- */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      padding: 3rem 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+    .feature-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.12);
+    }
+    .feature-card h3 {
+      margin-bottom: 1rem;
+      color: #1e40af;
+      font-size: 1.3rem;
+    }
+    .feature-card p {
+      color: #374151;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* ---- About Section ---- */
+    .about {
+      padding: 4rem 2rem;
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
+    }
+    .about h2 {
+      color: #1e40af;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+    .about p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    /* ---- Data Sources Section ---- */
+    .data-sources {
+      padding: 4rem 2rem;
+      background: #eef2ff;
+      text-align: center;
+    }
+    .data-sources h2 {
+      color: #1e40af;
+      margin-bottom: 1.5rem;
+    }
+    .data-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .data-item:hover {
+      background: #e0e7ff;
+    }
+    .data-item {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      text-align: left;
+    }
+    .data-item h3 { color: #4338ca; margin-bottom: 0.5rem; }
+
+    /* ---- CTA Section ---- */
+    .cta {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, #4338ca, #1e40af);
+      color: #fff;
+    }
+    .cta h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .cta p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    .cta a {
+      background: #f59e0b;
+      color: #fff;
+      padding: 1rem 1.8rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .cta a:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      background: #1f2937;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: auto;
+    }
+    footer a {
+      color: #3b82f6;
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Navbar -->
+  <header>
+    <div class="header-content">
+      <div class="logo-title">
+        <h1>🌍 NASA Weather Dashboard</h1>
+        <div class="nasa-badge">
+          <span>GSOY Data • 1763-Present</span>
+        </div>
+      </div>
+      <nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
+        <ul id="navLinks">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="weather-dashboard.html">Dashboard</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h2>Welcome to the NASA Weather Probability Dashboard</h2>
+    <p>Explore centuries of global weather data, analyze climate trends, and calculate the likelihood of specific weather conditions using NASA’s GSOY dataset.</p>
+    <a href="weather-dashboard.html">🚀 Go to Dashboard</a>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="feature-card">
+      <h3>📊 Climate Data</h3>
+      <p>Analyze global climate data from 1763 to present, updated weekly with reliable NASA GSOY records.</p>
+    </div>
+    <div class="feature-card">
+      <h3>🌍 Interactive Map</h3>
+      <p>Select any location worldwide and view historical temperature, precipitation, and other weather trends.</p>
+    </div>
+    <div class="feature-card">
+      <h3>📈 Probability Insights</h3>
+      <p>View probability distributions of temperature and precipitation for better forecasting and planning.</p>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about">
+    <h2>About This Project</h2>
+    <p>
+      The NASA Weather Probability Dashboard is designed to give researchers, students, and weather enthusiasts 
+      a powerful tool for exploring centuries of climate history. Using NASA’s Global Summary of the Year (GSOY) 
+      dataset, this platform provides insights into long-term weather trends, helping us understand climate 
+      variability and change over time.
+    </p>
+  </section>
+
+  <!-- Data Sources Section -->
+  <section class="data-sources">
+    <h2>Data Sources</h2>
+    <div class="data-list">
+      <div class="data-item">
+        <h3>🌐 NASA POWER API</h3>
+        <p>The Prediction Of Worldwide Energy Resources (POWER) API provides access to NASA Earth science data, 
+        enabling users to query meteorological variables across the globe.</p>
+      </div>
+      <div class="data-item">
+        <h3>📜 Global Summary of the Year (GSOY)</h3>
+        <p>A comprehensive dataset of annual weather statistics dating back to 1763, offering global summaries 
+        of temperature, precipitation, snow, and more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call-to-Action Section -->
+  <section class="cta">
+    <h2>Ready to Explore the Dashboard?</h2>
+    <p>Dive into interactive maps, climate charts, and probability analysis with just one click.</p>
+    <a href="weather-dashboard.html">🚀 Launch Dashboard</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 NASA Weather Dashboard 
+    </p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // Mobile nav toggle
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const navLinks = document.getElementById("navLinks");
+
+    mobileMenuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+  </script>
+</body>
+</html>
+
