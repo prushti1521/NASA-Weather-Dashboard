@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Weather Probability Dashboard</title>
+    <title>Dashboard | NASA Weather Probability Dashboard</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * {
@@ -93,6 +94,14 @@
       color: #fff;
       cursor: pointer;
     }
+    .nav-menu-btn {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
     @media (max-width: 768px) {
       nav ul {
         display: none;
@@ -107,21 +116,10 @@
       }
       nav ul.active { display: flex; }
       .mobile-menu-btn { display: block; }
+      .nav-menu-btn { display: block; }
     }
 
   
-
-/*header {
-            grid-column: 1 / -1;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 2rem;
-            box-shadow: var(--shadow-lg);
-            animation: slideDown 0.6s ease-out;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }*/
 
         @keyframes slideDown {
             from {
@@ -133,36 +131,6 @@
                 opacity: 1;
             }
         }
-
-        /*.header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }*/
-
-       /* h1 {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 700;
-        }*/
-
-       /* nasa-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--primary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            animation: pulse 2s infinite;
-        }*/
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -243,13 +211,6 @@
             font-size: 0.95rem;
             transition: all 0.3s ease;
             background: white;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            transform: translateY(-2px);
         }
 
         .btn {
@@ -643,11 +604,6 @@
     animation: fadeInUp 0.8s ease-out;
 }
 
-/* --- Input Focus Animation --- */
-input:focus, select:focus {
-    transform: scale(1.02);
-}
-
 /* --- Alert Slide-In --- */
 .alert {
     animation: slideInDown 0.6s ease-out;
@@ -699,6 +655,7 @@ input:hover, select:hover {
     box-shadow: 0 4px 10px rgba(30, 64, 175, 0.2);
 }
 input:focus, select:focus {
+    outline: none;
     transform: scale(1.04);
     border-color: var(--primary);
     box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
@@ -791,28 +748,17 @@ input:focus, select:focus {
         </div>
       </div>
       <nav>
-        
-        
+        <button class="nav-menu-btn" id="navMenuBtn" aria-label="Toggle main navigation menu">☰</button>
         <ul id="navLinks">
-          <li><a href="index.html" >Home</a></li>
+          <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="weather-dashboard.html"class="active">Dashboard</a></li>
+          <li><a href="weather-dashboard.html" class="active">Dashboard</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
     <div class="dashboard-container">
-        <!--<header>
-            <div class="header-content">
-                <h1>🌍 NASA Weather Probability Dashboard</h1>
-                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
-                <div class="nasa-badge">
-                    <span>GSOY Data • 1763-Present</span>
-                </div>
-            </div>
-        </header>-->
-     
 
         <aside class="sidebar" id="sidebar">
             <div class="control-section">
@@ -964,7 +910,7 @@ input:focus, select:focus {
             setupMapHandlers();
         }, 100);
 
-        // Mobile Menu
+        // Mobile Sidebar Menu
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -977,6 +923,14 @@ input:focus, select:focus {
         overlay.addEventListener('click', () => {
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
+        });
+
+        // Mobile Nav Menu
+        const navMenuBtn = document.getElementById('navMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        navMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
 
         // Map Click Handler
@@ -1289,13 +1243,13 @@ input:focus, select:focus {
             const sorted = [...values].sort((a, b) => a - b);
             const bins = 20;
             const histogram = new Array(bins).fill(0);
-            
-            values.forEach(value => {
-                const percentile = (sorted.indexOf(value) / sorted.length) * 100;
+
+            sorted.forEach((value, index) => {
+                const percentile = (index / sorted.length) * 100;
                 const binIndex = Math.min(Math.floor(percentile / (100 / bins)), bins - 1);
                 histogram[binIndex]++;
             });
-            
+
             return histogram;
         }
 

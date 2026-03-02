@@ -165,6 +165,13 @@
     }
     .contact-info a:hover { text-decoration: underline; }
 
+    /* Success Message */
+    .form-success-message {
+      color: #10b981;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
     /* Footer */
     footer {
       background: #1f2937;
@@ -310,15 +317,16 @@
     <div class="contact-form">
       <form id="contactForm">
         <label for="name">Name</label>
-        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="name" name="name" placeholder="Your Name" required>
 
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="you@example.com" required>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
 
         <label for="message">Message</label>
-        <textarea id="message" rows="5" placeholder="Write your message here..." required></textarea>
+        <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
 
         <button type="submit">Send Message</button>
+        <p id="formSuccess" role="status" class="form-success-message" style="display:none;">✅ Your message has been sent successfully!</p>
       </form>
     </div>
 
@@ -328,9 +336,9 @@
       <p><strong>Email:</strong> <a href="mailto:info@nasaweatherdashboard.com">info@nasaweatherdashboard.com</a></p>
       <p><strong>Follow Us:</strong></p>
       <p>
-        🌐 <a href="#">Twitter</a> | 
-        📘 <a href="#">Facebook</a> | 
-        💼 <a href="#">LinkedIn</a>
+        🌐 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter (external link)">Twitter</a> | 
+        📘 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook (external link)">Facebook</a> | 
+        💼 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (external link)">LinkedIn</a>
       </p>
     </div>
   </main>
@@ -350,12 +358,15 @@
       navLinks.classList.toggle("active");
     });
 
-    // Fake form submit handler
+    // Form submit handler
     const contactForm = document.getElementById("contactForm");
     contactForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      alert("✅ Your message has been sent successfully!");
+      const SUCCESS_MESSAGE_DURATION = 5000;
+      const successMsg = document.getElementById("formSuccess");
+      successMsg.style.display = "block";
       contactForm.reset();
+      setTimeout(() => { successMsg.style.display = "none"; }, SUCCESS_MESSAGE_DURATION);
     });
   </script>
 </body>
